@@ -4,6 +4,8 @@
 //Class -
 //Lab  -
 
+import static java.lang.System.gc;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -29,20 +31,42 @@ public class MadLib
 	public MadLib(String fileName)
 	{
 		//load stuff
-		Scanner storyReader = new Scanner(fileName);
+		loadNouns();
+		loadVerbs();
+		loadAdjectives();
 
 		try
 		{
 			//Read the different parts of the story and concatenate the resulting
 			//story using the symbols to tell you the parts of speech
 			
-
+			Scanner storyReader = new Scanner(fileName);
+			story = "";
 			//While there is more of the story, read in the word/symbol
-
+			while (storyReader.hasNext())
+			{
+				String read = storyReader.next();
 				//If what was read in is one of the symbols, find a random
 				//word to replace it.
+				if (read.equals("#"))
+				{
+					story += getRandomNoun() + " ";
+				}
+				else if (read.equals("@"))
+				{
+					story += getRandomVerb() + " ";
+				}
+				else if (read.equals("&"))
+				{
+					story += getRandomAdjective() + " ";
+				}
+				else
+				{
+					story += read + " ";
+				}
 			}
 
+			storyReader.close();
 
 		}
 		catch(Exception e)
@@ -54,80 +78,91 @@ public class MadLib
 
 	public void loadNouns()
 	{
-		Scanner nounReader = new Scanner(new File("nouns.dat"));
+		
 
 		try
 		{
+			Scanner nounReader = new Scanner(new File("nouns.dat"));
+
 			while (nounReader.hasNext())
 			{
 				nouns.add(nounReader.nextLine());
 			}
+
+			nounReader.close();
 		}
 		catch(Exception e)
 		{
 			System.out.println("nouns.dat does not exist");
 		}
 
+		
 	}
 
 	public void loadVerbs()
 	{
-		Scanner verbReader = new Scanner("verbs.dat");
 
 		try
 		{
+			Scanner verbReader = new Scanner("verbs.dat");
+
 			while (verbReader.hasNext())
 			{
 				verbs.add(verbReader.nextLine());
 			}
+
+			verbReader.close();
 		}
 		catch(Exception e)
 		{
 			System.out.println("verbs.dat does not exist");
 		}
+
+		
 	}
 
 	public void loadAdjectives()
 	{
-		Scanner adjectiveReader = new Scanner("adjectives.dat");
-
+		
 		try
 		{
+			Scanner adjectiveReader = new Scanner("adjectives.dat");
+
 			while (adjectiveReader.hasNext())
 			{
 				adjectives.add(adjectiveReader.nextLine());
 			}
+
+			adjectiveReader.close();
 		}
 		catch(Exception e)
 		{
 			System.out.println("adjectives.dat does not exist");
 		}
+
+		
 	}
 
 	public String getRandomVerb()
 	{
-		int x = (int)(Math.random() * (verbs.size()));
-		
-		return "" + verbs.get(x);
+		//Math.random()
+		//Math.random() * size
+		return "" + verbs.get( (int)(Math.random()*(verbs.size())));
 	}
 
 	public String getRandomNoun()
 	{
-		Random x = new Random(nouns.size());
-		int y = x.nextInt();
-
-		return "" + nouns.get(y);
+		Random x = new Random();
+		return "" + nouns.get(x.nextInt(nouns.size()));
 	}
 
 	public String getRandomAdjective()
 	{
-		int x = (int)(Math.random() *(adjectives.size()));
-
-		return "" + adjectives.get(x);
+		return "" + adjectives.get((int)(Math.random()*(adjectives.size())));
 	}
 
 	public String toString()
 	{
-		return "";
+		return "" + story;
 	}
 }
